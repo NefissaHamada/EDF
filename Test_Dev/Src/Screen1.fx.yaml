@@ -1,0 +1,132 @@
+Screen1 As screen:
+    LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+
+    "dpDatedeb As 'Sélecteur de dates'":
+        DisplayMode: =DisplayMode.Edit
+        FillColor: =
+        Height: =32
+        IconFill: =
+        TextColor: =
+        Width: =210
+        X: =75
+        Y: =51
+        ZIndex: =1
+
+    btnAddDays As Bouton:
+        BorderColor: =
+        DisabledBorderColor: =
+        DisabledFillColor: =
+        DisabledTextColor: =
+        DisplayMode: =DisplayMode.Edit
+        FillColor: =
+        Height: =32
+        HoverBorderColor: =
+        HoverFillColor: =
+        HoverTextColor: =
+        OnChange: =false
+        OnSelect: |
+            =UpdateContext(
+                {
+                    DateCalculee: With(
+                        {
+                            varStartDate: dpDatedeb.Value,
+                            varAddWeekdays: txtDays.Value
+                        },
+                        DateAdd(
+                            varStartDate,
+                            (Value(varAddWeekdays) + RoundDown(
+                                (Weekday(
+                                    varStartDate,
+                                    StartOfWeek.Tuesday
+                                ) + Value(varAddWeekdays) - 1) / 5,
+                                0
+                            ) * 2) * -1,
+                            TimeUnit.Days
+                        )
+                    )
+                }
+            );
+            UpdateContext(
+                {
+                    Holidays: [
+                        Date(
+                            2023,
+                            1,
+                            1
+                        ),
+                        Date(
+                            2023,
+                            7,
+                            14
+                        )
+                    ]
+                }
+            );
+            UpdateContext(
+                {
+                    DateAffiche: DateAdd(
+                        DateCalculee,
+                        (-1) * With(
+                            {
+                                varDateRange: ForAll(
+                                    Sequence(dpDatedeb.Value - DateCalculee + 1),
+                                    DateCalculee + Value - 1
+                                )
+                            },
+                            If(
+                                And(
+                                    IsBlank(dpDatedeb.Value),
+                                    IsBlank(DateCalculee)
+                                ),
+                                0,
+                                CountIf(
+                                    varDateRange,
+                                    And(
+                                        Weekday(Value) in [
+                                            2,
+                                            3,
+                                            4,
+                                            5,
+                                            6
+                                        ],
+                                        (Value in Holidays)
+                                    )
+                                )
+                            )
+                        ),
+                        TimeUnit.Days
+                    )
+                }
+            );
+        PressedBorderColor: =
+        PressedFillColor: =
+        PressedTextColor: =
+        Text: ="Calculer"
+        TextColor: =
+        Width: =96
+        X: =75
+        Y: =228
+        ZIndex: =2
+
+    "txtDays As 'Zone de texte'":
+        ColorBackground: =
+        ColorText: =
+        DisplayMode: =DisplayMode.Edit
+        Height: =32
+        Value: =""
+        Width: =320
+        X: =75
+        Y: =139
+        ZIndex: =3
+
+    lblResult As Étiquette:
+        Color: =
+        DisplayMode: =DisplayMode.Edit
+        Height: =32
+        OnChange: =false
+        Text: =Text(DateAffiche,"dd/mm/yyyy")
+        Width: =320
+        X: =75
+        Y: =323
+        ZIndex: =4
+
