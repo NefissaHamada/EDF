@@ -20,7 +20,7 @@
       "autocreateenvironmentvariables": false,
       "behaviorpropertyui": false,
       "blockmovingcontrol": true,
-      "cdsdataformatting": false,
+      "cdsdataformatting": true,
       "classiccontrols": false,
       "consistentreturnschemafortabularfunctions": true,
       "copyandmerge": true,

@@ -101,7 +101,7 @@ Screen1 As screen:
         PressedBorderColor: =
         PressedFillColor: =
         PressedTextColor: =
-        Text: ="Calculer2"
+        Text: ="Calculer n+1"
         TextColor: =
         Width: =96
         X: =75
